@@ -1,5 +1,5 @@
 const { Server } = require('socket.io');
-const { chatFactory } = require('./chat');
+const { chatFactory, Usernames } = require('./chat');
 
 const chat = chatFactory();
 
@@ -16,6 +16,12 @@ io.on('connection', (socket) => {
 	socket.on('send-msg', (payload) => {
 		console.log('newMsg event: ', payload);
 		chat.addMessage(socket.id, roomId, payload.msg);
+	});
+
+	socket.on('username', (payload) => {
+		const oldUsername = (Usernames = [ socket.id ]);
+		Usernames[socket.id] = payload.username;
+		io.emit('username-change', { old: oldUsername, new: payload.username });
 	});
 
 	socket.on('disconnect', () => {

@@ -4,7 +4,8 @@
 	"description": "backend for k-chat",
 	"main": "server.js",
 	"dependencies": {
-		"socket.io": "^4.4.1"
+		"socket.io": "^4.4.1",
+		"unique-username-generator": "^1.0.1"
 	},
 	"devDependencies": {},
 	"scripts": {
