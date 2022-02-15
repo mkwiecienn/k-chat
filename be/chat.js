@@ -30,7 +30,7 @@ const chatFactory = () => ({
 
 		Usernames[userId] = genUsername.generateUsername('', 2, 19);
 
-		return room.id;
+		return { room, username: Usernames[userId] };
 	},
 	handleUserDiconnect: function(userId, roomId) {
 		const room = this.rooms.find((r) => r.userIds.includes(userId));

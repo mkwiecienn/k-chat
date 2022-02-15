@@ -1,18 +1,26 @@
 import { io } from 'socket.io-client';
 
-export const socketApi = () => {
-	const socket = io('ws://localhost:3333');
-	console.log('initializing socket.io connection');
-	socket.on('connect', () => {
-		console.log(socket.id);
-	});
-	socket.on('disconnect', () => {
-		console.log('client disconnected from the server');
-	});
-
+function socketApi() {
 	return {
-		sendMsg: (msg) => {
-			socket.emit('send-msg', { msg });
+		init: function() {
+			return new Promise((resolve) => {
+				this.socket = io('ws://localhost:3333');
+				this.socket.on('connect', () => {
+					console.log(this.socket.id);
+				});
+				this.socket.on('your-username', (payload) => {
+					this.username = payload.username;
+					resolve();
+				});
+			});
+		},
+		sendMsg: function(msg) {
+			this.socket.emit('send-msg', { msg });
+		},
+		getUsername: function() {
+			return this.username;
 		}
 	};
-};
+}
+
+export default socketApi;

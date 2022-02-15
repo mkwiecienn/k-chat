@@ -1,6 +1,9 @@
-export const chatApi = (_api) => {
+export const chatApiFactory = (_api) => {
 	return {
 		_api,
-		sendMsg: (msg) => _api.sendMsg(msg)
+		..._api
+		// init: _api.init,
+		// sendMsg: (msg) => _api.sendMsg(msg),
+		// getUsername: () => _api.getUsername()
 	};
 };
