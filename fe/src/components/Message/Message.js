@@ -1,10 +1,14 @@
 import PropTypes from 'prop-types';
 import './Message.css';
 
-const Message = ({ id, content, isMy, color, fontSize, backgroundColor }) => {
+const Message = ({ id, content, isMy, color, fontSize, backgroundColor, className }) => {
 	const bgColor = isMy ? 'lightgray' : 'lightgreen';
 	return (
-		<p className={`message ${isMy ? 'my' : 'their'}`} style={{ backgroundColor: bgColor, fontSize, color }}>
+		// I know I could use some kind of a library for composing classes
+		<p
+			className={`message ${isMy ? 'my' : 'their'} ${className}`}
+			style={{ backgroundColor: bgColor, fontSize, color }}
+		>
 			{content}
 		</p>
 	);
@@ -16,7 +20,8 @@ Message.propTypes = {
 	isMy: PropTypes.bool,
 	color: PropTypes.string,
 	fontSize: PropTypes.string,
-	backgroundColor: PropTypes.string
+	backgroundColor: PropTypes.string,
+	className: PropTypes.string
 };
 
 Message.defaultProps = {
@@ -24,7 +29,8 @@ Message.defaultProps = {
 	isMy: true,
 	color: 'black',
 	fontSize: '100%',
-	backgroundColor: 'white'
+	backgroundColor: 'white',
+	className: ''
 };
 
 export default Message;
