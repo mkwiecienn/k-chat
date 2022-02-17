@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
 	}
 
 	socket.on('send-msg', (payload) => {
-		const msg = chat.addMessage(socket.id, room.id, payload.msg);
+		const msg = chat.addMessage(socket.id, room.id, payload);
 
 		room.userIds.forEach((userId) => {
 			io.sockets.sockets.get(userId).emit('new-messages', [ msg ]);

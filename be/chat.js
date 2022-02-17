@@ -51,9 +51,9 @@ const chatFactory = () => ({
 	removeRoom: function(roomId) {
 		this.rooms = this.rooms.filter((r) => r.id !== roomId);
 	},
-	addMessage: function(author, roomId, messageContent) {
+	addMessage: function(author, roomId, message) {
 		const room = this.rooms.find((r) => r.id === roomId);
-		const msg = Message(author, messageContent);
+		const msg = Message(author, message.content);
 
 		if (room) {
 			room.messages.push(msg);

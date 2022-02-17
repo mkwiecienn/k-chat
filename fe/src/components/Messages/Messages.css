@@ -1,0 +1,55 @@
+.Messages {
+	height: 100%;
+	display: flex;
+	justify-content: end;
+	overflow-y: auto;
+	overflow-x: hidden;
+	flex-direction: column-reverse;
+}
+
+.messages-wrapper {
+	height: auto;
+	list-style-type: none;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+
+	align-self: end;
+}
+
+.ul {
+	width: 64px;
+}
+
+.message {
+	padding: 16px;
+	border-radius: 8px;
+	position: relative;
+}
+
+.message::after {
+	position: absolute;
+	width: 12px;
+	height: 12px;
+	transform: rotate(45deg);
+	background-color: inherit;
+	content: '';
+	bottom: -4px;
+	border-radius: 2px;
+}
+
+.message.my {
+	float: left;
+}
+
+.message.my::after {
+	right: 12px;
+}
+
+.message.their {
+	float: right;
+}
+
+.message.their::after {
+	left: 12px;
+}
