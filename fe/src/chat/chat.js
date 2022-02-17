@@ -44,16 +44,18 @@ export const chat = (_api) => {
 		},
 		sendMessage: (msgContent) => {
 			let content = msgContent;
-			const foundCommand = commands.find((c) => !!c(msgContent).command);
+			const foundCommand = commands.map((c) => c(msgContent)).find((c) => !!c.command);
 
 			if (!!foundCommand) {
 				const { text, command } = foundCommand;
 				content = text;
 
 				switch (command) {
+					case Command.NICK:
+						_api.updateUsername(text);
+						return;
 					case Command.FADE_LAST:
 					case Command.HIGHLIGHT:
-					case Command.NICK:
 					case Command.REMOVE_LAST:
 					case Command.THINK:
 					case Command.COUNTDOWN:

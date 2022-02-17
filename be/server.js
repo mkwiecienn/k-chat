@@ -39,10 +39,10 @@ io.on('connection', (socket) => {
 		});
 	});
 
-	// socket.on('username', (payload) => {
-	// 	Usernames[socket.id] = payload.username;
-	// 	io.emit('username', { id: socket.id, username: payload.username });
-	// });
+	socket.on('username', (payload) => {
+		Usernames[socket.id] = payload.username;
+		io.emit('username', { id: socket.id, username: payload.username });
+	});
 
 	socket.on('disconnect', () => {
 		console.log('user has disconnected ', socket.id);
