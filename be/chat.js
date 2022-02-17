@@ -53,10 +53,12 @@ const chatFactory = () => ({
 	},
 	addMessage: function(author, roomId, messageContent) {
 		const room = this.rooms.find((r) => r.id === roomId);
+		const msg = Message(author, messageContent);
 
 		if (room) {
-			room.messages.push(Message(author, messageContent));
+			room.messages.push(msg);
 		}
+		return msg;
 	},
 	changeUsername: function(userId, username) {
 		Usernames[userId] = username;

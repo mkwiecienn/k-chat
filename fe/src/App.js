@@ -1,34 +1,49 @@
-import logo from './logo.svg';
+import { useContext, useEffect, useState } from 'react';
+import { ChatContext } from '.';
 import './App.css';
-import { useEffect, useState } from 'react';
-import { chatApi } from '.';
+import Messages from './components/Messages/Messages';
 
 function App() {
-	const [ username, setUsername ] = useState('');
+	const [ ourUsername, setOutUsername ] = useState('');
+	const [ theirUsername, setTheirUsername ] = useState('');
+	const [ messages, setMessages ] = useState([]);
+
+	const chatContext = useContext(ChatContext);
 
 	useEffect(() => {
 		const init = async () => {
-			const username = await chatApi.getUsername();
-			setUsername(username);
+			await chatContext.init();
+
+			chatContext.messages$.subscribe(setMessages);
+			chatContext.usernames$.subscribe(([ our, their ]) => {
+				setOutUsername(our);
+				setTheirUsername(their);
+			});
 		};
 		init();
 	}, []);
 
+	const sendMessage = (event) => {
+		event.preventDefault();
+		chatContext.sendMessage(event.target[0].value);
+		event.target[0].value = '';
+	};
+
 	return (
 		<div className="App">
-			{/* <header className="App-header">
-				<img src={logo} className="App-logo" alt="logo" />
-				<p>
-					Edit <code>src/App.js</code> and save to reload.
-				</p>
-				<a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-					Learn React
-				</a>
-			</header> */}
 			<div className="chat-header">
 				<div>
-					<span>You: {username}</span>
+					<span>You: {ourUsername}</span>
+					<span>Friend: {theirUsername}</span>
 				</div>
+			</div>
+			<Messages messages={messages} />
+
+			<div className="chat-form">
+				<form onSubmit={sendMessage}>
+					<input type="text" name="msg" />
+					<input type="submit" value="Send" />
+				</form>
 			</div>
 		</div>
 	);
