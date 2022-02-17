@@ -68,9 +68,15 @@ export const chat = (_api) => {
 					case Command.NICK:
 						_api.updateUsername(text);
 						return;
+					case Command.REMOVE_LAST:
+						const myMessages = messages.filter((m) => m.isMy);
+						if (myMessages.length > 0) {
+							const lastMsg = myMessages[myMessages.length - 1];
+							_api.updateMessage({ ...lastMsg, content: '' });
+						}
+						return;
 					case Command.FADE_LAST:
 					case Command.HIGHLIGHT:
-					case Command.REMOVE_LAST:
 					case Command.COUNTDOWN:
 						break;
 					default:

@@ -14,7 +14,7 @@ function App() {
 		const init = async () => {
 			await chatContext.init();
 
-			chatContext.messages$.subscribe(setMessages);
+			chatContext.messages$.subscribe((m) => m && setMessages([ ...m ]));
 			chatContext.usernames$.subscribe(([ our, their ]) => {
 				setOutUsername(our);
 				setTheirUsername(their);

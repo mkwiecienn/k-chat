@@ -28,7 +28,8 @@ const socketApi = () => {
 		},
 		updateUsername: (username) => {
 			socket.emit(Events.USERNAME_UPDATE, { username });
-		}
+		},
+		updateMessage: (msg) => socket.emit(Events.UPDATE_MESSAGE, msg)
 	};
 };
 

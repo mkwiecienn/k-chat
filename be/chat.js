@@ -4,13 +4,21 @@ const { getId } = require('./utils');
 // userId: username
 const Usernames = {};
 
-const Message = ({ author = '', content = '', color = 'black', fontSize = '100%', backgroundColor = 'white' }) => ({
+const Message = ({
+	author = '',
+	content = '',
+	color = 'black',
+	fontSize = '100%',
+	backgroundColor = 'white',
+	roomId = ''
+}) => ({
 	id: getId(),
 	content,
 	author,
 	color,
 	fontSize,
-	backgroundColor
+	backgroundColor,
+	roomId
 });
 
 const Room = (userIds = []) => ({
@@ -63,7 +71,7 @@ const chatFactory = () => ({
 		}
 		return msg;
 	},
-	udpateMessage: function(msg) {
+	updateMessage: function(msg) {
 		const foundRoom = this.rooms.find((r) => r.id === msg.roomId);
 
 		if (!foundRoom) return;
@@ -71,6 +79,11 @@ const chatFactory = () => ({
 		const msgIndex = foundRoom.messages.findIndex((m) => m.id === msg.id);
 
 		if (msgIndex === -1) return;
+
+		if (msg.content === '') {
+			foundRoom.messages.splice(msgIndex, 1);
+			return msg;
+		}
 
 		foundRoom.messages[msgIndex] = msg;
 		return msg;
