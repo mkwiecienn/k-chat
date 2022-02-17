@@ -42,8 +42,9 @@ export const chat = (_api) => {
 			usernames$.next(usernames);
 		},
 		sendMessage: (msgContent) => {
-			const content = processors.reduce((prev, curr) => curr(prev), msgContent);
+			let content = processors.reduce((prev, curr) => curr(prev), msgContent);
 
+			if (!content) return;
 			_api.sendMessage({ content });
 		},
 		usernames$,
