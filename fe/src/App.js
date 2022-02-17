@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { ChatContext } from '.';
-import './App.css';
 import Messages from './components/Messages/Messages';
+import './App.css';
 
 function App() {
 	const [ ourUsername, setOutUsername ] = useState('');
@@ -37,7 +37,7 @@ function App() {
 					<span>Friend: {theirUsername}</span>
 				</div>
 			</div>
-			<Messages messages={messages} />
+			<Messages messages={messages} className="messages" />
 
 			<div className="chat-form">
 				<form onSubmit={sendMessage}>
