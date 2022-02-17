@@ -1,30 +1,47 @@
+export const Command = {
+	NICK: 'nick',
+	THINK: 'think',
+	REMOVE_LAST: 'remove-last',
+	FADE_LAST: 'fade-last',
+	HIGHLIGHT: 'highlight',
+	COUNTDOWN: 'countdown'
+};
+
 export const usernameChange = (text) => {
 	const match = /\/nick\s(\w+)$/g.exec(text);
 
 	if (match) {
-		return match[1];
+		return { text: match[1], command: Command.NICK };
 	}
-	return '';
+	return { text };
 };
 
 export const think = (text) => {
 	const match = /\/think\s(.*)$/g.exec(text);
 
 	if (match) {
-		return match[0];
+		return { text: match[0], command: Command.THINK };
 	}
-	return '';
+	return { text };
 };
 
-export const removeLast = (text) => text === '/oops';
+export const removeLast = (text) => {
+	return text === '/oops' ? { command: Command.REMOVE_LAST, text: '' } : { text };
+};
 
-export const fadeLast = (text) => text === '/fadelast';
+export const fadeLast = (text) => {
+	return text === '/fadelast' ? { command: Command.FADE_LAST, text: '' } : { text };
+};
 
 export const higlight = (text) => {
 	const match = /\/highlight\s(.*)$/g.exec(text);
 
 	if (match) {
-		return match[0];
+		return { text: match[0], command: Command.HIGHLIGHT };
 	}
-	return '';
+	return { text };
 };
+
+const commands = [ usernameChange, think, removeLast, fadeLast, higlight ];
+
+export default commands;

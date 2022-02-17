@@ -1,4 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
+import commands, { Command } from './commands';
 import processors from './textProcessors';
 
 export const Events = {
@@ -42,7 +43,27 @@ export const chat = (_api) => {
 			usernames$.next(usernames);
 		},
 		sendMessage: (msgContent) => {
-			let content = processors.reduce((prev, curr) => curr(prev), msgContent);
+			let content = msgContent;
+			const foundCommand = commands.find((c) => !!c(msgContent).command);
+
+			if (!!foundCommand) {
+				const { text, command } = foundCommand;
+				content = text;
+
+				switch (command) {
+					case Command.FADE_LAST:
+					case Command.HIGHLIGHT:
+					case Command.NICK:
+					case Command.REMOVE_LAST:
+					case Command.THINK:
+					case Command.COUNTDOWN:
+						break;
+					default:
+						break;
+				}
+			}
+
+			content = processors.reduce((prev, curr) => curr(prev), msgContent);
 
 			if (!content) return;
 			_api.sendMessage({ content });
