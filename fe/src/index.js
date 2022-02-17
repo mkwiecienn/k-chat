@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { chat } from './api/chat';
-import socketApi from './api/socket';
+import { chat } from './chat/chat';
+import socketApi from './chat/socket';
 
 // different api implementation can be injected here
 export const chatApi = chat(socketApi());

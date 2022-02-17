@@ -1,7 +1,8 @@
 .App {
 	text-align: center;
 	height: 80%;
-	width: 80%;
+	max-width: 512px;
+	margin: 32px auto auto auto;
 	position: relative;
 	display: grid;
 	grid-template-rows: 64px auto 64px;
