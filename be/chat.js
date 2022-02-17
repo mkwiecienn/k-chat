@@ -4,10 +4,13 @@ const { getId } = require('./utils');
 // userId: username
 const Usernames = {};
 
-const Message = (author = '', content = '') => ({
+const Message = ({ author = '', content = '', color = 'black', fontSize = '100%', backgroundColor = 'white' }) => ({
 	id: getId(),
 	content,
-	author
+	author,
+	color,
+	fontSize,
+	backgroundColor
 });
 
 const Room = (userIds = []) => ({
@@ -53,11 +56,23 @@ const chatFactory = () => ({
 	},
 	addMessage: function(author, roomId, message) {
 		const room = this.rooms.find((r) => r.id === roomId);
-		const msg = Message(author, message.content);
+		const msg = Message({ author, content: message.content, ...message });
 
 		if (room) {
 			room.messages.push(msg);
 		}
+		return msg;
+	},
+	udpateMessage: function(msg) {
+		const foundRoom = this.rooms.find((r) => r.id === msg.roomId);
+
+		if (!foundRoom) return;
+
+		const msgIndex = foundRoom.messages.findIndex((m) => m.id === msg.id);
+
+		if (msgIndex === -1) return;
+
+		foundRoom.messages[msgIndex] = msg;
 		return msg;
 	},
 	changeUsername: function(userId, username) {

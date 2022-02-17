@@ -18,7 +18,8 @@ io.on('connection', (socket) => {
 	socket.emit('welcome', {
 		id: socket.id,
 		username,
-		previousMessages: []
+		previousMessages: [],
+		roomId: room.id
 		//TODO I need some verification if it's the same user joining
 		// previousMessages: room.messages
 	});
@@ -42,6 +43,14 @@ io.on('connection', (socket) => {
 	socket.on('username', (payload) => {
 		Usernames[socket.id] = payload.username;
 		io.emit('username', { id: socket.id, username: payload.username });
+	});
+
+	socket.on('update-message', (payload) => {
+		const updated = chat.updateMessage(payload);
+
+		if (updated) {
+			io.emit('update-message', updated);
+		}
 	});
 
 	socket.on('disconnect', () => {

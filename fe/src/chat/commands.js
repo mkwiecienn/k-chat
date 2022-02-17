@@ -1,6 +1,5 @@
 export const Command = {
 	NICK: 'nick',
-	THINK: 'think',
 	REMOVE_LAST: 'remove-last',
 	FADE_LAST: 'fade-last',
 	HIGHLIGHT: 'highlight',
@@ -12,15 +11,6 @@ export const usernameChange = (text) => {
 
 	if (match) {
 		return { text: match[1], command: Command.NICK };
-	}
-	return { text };
-};
-
-export const think = (text) => {
-	const match = /\/think\s(.*)$/g.exec(text);
-
-	if (match) {
-		return { text: match[0], command: Command.THINK };
 	}
 	return { text };
 };
@@ -37,11 +27,11 @@ export const higlight = (text) => {
 	const match = /\/highlight\s(.*)$/g.exec(text);
 
 	if (match) {
-		return { text: match[0], command: Command.HIGHLIGHT };
+		return { text: match[1], command: Command.HIGHLIGHT };
 	}
 	return { text };
 };
 
-const commands = [ usernameChange, think, removeLast, fadeLast, higlight ];
+const commands = [ usernameChange, removeLast, fadeLast, higlight ];
 
 export default commands;

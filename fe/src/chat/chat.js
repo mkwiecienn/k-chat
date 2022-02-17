@@ -6,7 +6,8 @@ export const Events = {
 	WELCOME: 'welcome',
 	USERNAME_UPDATE: 'username',
 	NEW_MESSAGES: 'new-messages',
-	SEND_MESSAGE: 'send-msg'
+	SEND_MESSAGE: 'send-msg',
+	UPDATE_MESSAGE: 'update-message'
 };
 
 export const chat = (_api) => {
@@ -14,6 +15,7 @@ export const chat = (_api) => {
 	let messages$ = new BehaviorSubject();
 	let messages = [];
 	let userId = '';
+	let roomId = '';
 	// 1st - ours, 2nd - our friend
 	const usernames = [ '', '' ];
 
@@ -25,9 +27,6 @@ export const chat = (_api) => {
 			_api.getUsername().subscribe((usernamePayload) => {
 				const { username, id } = usernamePayload;
 				usernames[+(id !== userId)] = username;
-
-				console.log('usernames: ', usernames);
-
 				usernames$.next(usernames);
 			});
 
@@ -36,19 +35,34 @@ export const chat = (_api) => {
 				messages$.next(messages);
 			});
 
+			_api.getMessageUpdate().subscribe((updated) => {
+				const foundIndex = messages.findIndex((m) => m.id === updated.id);
+
+				if (foundIndex === -1) return;
+
+				if (updated.content === '') {
+					messages.splice(foundIndex, 1);
+				} else {
+					messages[foundIndex] = updated;
+				}
+
+				messages$.next(messages);
+			});
+
 			const data = await _api.getWelcome();
 			userId = data.id;
 			usernames[0] = data.username;
+			roomId = data.roomId;
 
 			usernames$.next(usernames);
 		},
 		sendMessage: (msgContent) => {
-			let content = msgContent;
+			let msgText = msgContent;
 			const foundCommand = commands.map((c) => c(msgContent)).find((c) => !!c.command);
 
 			if (!!foundCommand) {
 				const { text, command } = foundCommand;
-				content = text;
+				msgText = text;
 
 				switch (command) {
 					case Command.NICK:
@@ -57,7 +71,6 @@ export const chat = (_api) => {
 					case Command.FADE_LAST:
 					case Command.HIGHLIGHT:
 					case Command.REMOVE_LAST:
-					case Command.THINK:
 					case Command.COUNTDOWN:
 						break;
 					default:
@@ -65,10 +78,16 @@ export const chat = (_api) => {
 				}
 			}
 
-			content = processors.reduce((prev, curr) => curr(prev), msgContent);
+			const { text, properties } = processors.reduce(
+				(prev, curr) => {
+					const currResult = curr(prev);
+					return { text: currResult.text, properties: { ...prev.properties, ...currResult.properties } };
+				},
+				{ text: msgText, properties: {} }
+			);
 
-			if (!content) return;
-			_api.sendMessage({ content });
+			if (!text) return;
+			_api.sendMessage({ content: text, roomId, ...properties });
 		},
 		usernames$,
 		messages$,

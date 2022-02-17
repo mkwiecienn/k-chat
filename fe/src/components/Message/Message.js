@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import './Message.css';
 
 const Message = ({ id, content, isMy, color, fontSize, backgroundColor }) => {
 	const bgColor = isMy ? 'lightgray' : 'lightgreen';
